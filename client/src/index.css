@@ -1,0 +1,122 @@
+@import "~materialize-css/dist/css/materialize.min.css";
+
+/*footer прижать к низу*/
+#root {
+	display: flex !important;
+	min-height: 100vh !important;
+	flex-direction: column !important;
+}
+
+main {
+	flex: 1 0 auto !important;
+}
+
+/*белые цвета*/
+input.white-input,
+textarea.white-textarea {
+	border-bottom: 1px solid #fff !important;
+	box-shadow: 0 1px 0 0 #fff !important;
+}
+
+input.white-input + label,
+textarea.white-textarea + label {
+	color: #ffffff !important;
+}
+
+/*input.white-input::placeholder,*/
+/*textarea.white-textarea::placeholder {*/
+/*	color: #ffffff !important;*/
+/*}*/
+
+input.white-input:focus + label,
+textarea.white-textarea:focus + label {
+	color: #fff !important;
+}
+
+input.white-input:focus,
+textarea.white-textarea:focus {
+	border-bottom: 1px solid #fff !important;
+	box-shadow: 0 1px 0 0 #fff !important;
+}
+
+/*Синие цвета*/
+input.blue-textarea,
+textarea.blue-textarea {
+	border-bottom: 1px solid #2196F3 !important;
+	box-shadow: 0 1px 0 0 #2196F3 !important;
+}
+
+input.blue-textarea + label,
+textarea.blue-textarea + label {
+	color: #2196F3 !important;
+}
+
+/*input.blue-textarea::placeholder,*/
+/*textarea.blue-textarea::placeholder {*/
+/*	color: #2196F3 !important;*/
+/*}*/
+
+input.blue-textarea:focus + label,
+textarea.blue-textarea:focus + label {
+	color: #2196F3 !important;
+}
+
+input.blue-textarea:focus,
+textarea.blue-textarea:focus {
+	border-bottom: 1px solid #2196F3 !important;
+	box-shadow: 0 1px 0 0 #2196F3 !important;
+}
+
+/*синия полоса*/
+.indicator {
+	background-color: #2196F3 !important;
+}
+
+/*синии табы*/
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+	background-color: rgba(33, 150, 243, 0.2) !important;
+}
+
+/*синий сайд бар*/
+.sidenav li > a:hover {
+	background-color: rgba(33, 150, 243, 0.1) !important;
+}
+
+/*белый чекбокс*/
+.checkbox-white[type="checkbox"] + span:before {
+	border: 2px solid white;
+	background: transparent;
+}
+
+.checkbox-white[type="checkbox"]:checked + span:before {
+	border: 2px solid transparent;
+	border-bottom: 2px solid white;
+	border-right: 2px solid white;
+	background: transparent;
+}
+
+/*синия полоса загрузки*/
+.progress {
+	background-color: rgba(30, 136, 229, 0.3) !important;
+}
+
+/*кастомные отступы*/
+.margin-top-custom {
+	margin-top: 30px;
+}
+
+.margin-left-custom {
+	margin-left: 30px;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.edit-link-custom {
+	position: absolute;
+	bottom: 12px;
+	left: 15px;
+	z-index: 100;
+	cursor: pointer;
+}
