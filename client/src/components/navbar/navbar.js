@@ -63,9 +63,9 @@ const NavBar = () => {
 		<header>
 			<Nav>
 				<div className="nav-wrapper blue darken-1">
-					<NavLink to='/' className='brand-logo'>Logo</NavLink>
+					<NavLink to='/' className='brand-logo'>Репетиторство</NavLink>
 					<a data-target="mobile-demo" className="sidenav-trigger">
-						<i className="material-icons">menu</i>
+						<i className="material-icons cursor-pointer">menu</i>
 					</a>
 					<ul id="nav-mobile" className="right hide-on-med-and-down">
 						<li><NavLink to='/questionnaires'>Анкеты</NavLink></li>

@@ -21,6 +21,8 @@ const PersonalArea = () => {
 	const [forms, setForms] = useState([]);
 	// отклики
 	const [feedback, setFeedback] = useState([]);
+	//отклики на анкеты для учителя
+	const [teacherFeedback, setTeacherFeedback] = useState([]);
 	const {request, loading} = useHttp()
 	const {token, logout, isAdmin, isTeacher} = useContext(AuthContext);
 	const history = useHistory()
@@ -29,34 +31,118 @@ const PersonalArea = () => {
 	const getPersonalInfo = useCallback(async () => {
 		try {
 			if (isTeacher) {
-				const data = await request('/api/form/personal', 'GET', null, {Authorization: `Bearer ${token}`})
-				const data2 = await request('/api/feedback/teacherFeedback', 'GET', null, {Authorization: `Bearer ${token}`})
-				console.log(data2)
-				setForms(data)
-				if (data.length) {
-					setUser(data[0].teacher.FULL_NAME)
+				const getForms = await request('/api/form/personal', 'GET', null, {Authorization: `Bearer ${token}`})
+				setForms(getForms)
+				if (getForms.length) {
+					setUser(getForms[0].teacher.FULL_NAME)
 				} else {
 					const userName = await request('/api/auth/profile', 'GET', null, {Authorization: `Bearer ${token}`})
 					setUser(userName.FULL_NAME)
 				}
 				setFlag(false)
 			} else {
-				if (!isAdmin) {
-					const getFeedback = await request('/api/feedback/personal', 'GET', null, {Authorization: `Bearer ${token}`})
-					setFeedback(getFeedback)
-				}
 				const userName = await request('/api/auth/profile', 'GET', null, {Authorization: `Bearer ${token}`})
 				setUser(userName.FULL_NAME)
+				setFlag(false)
 			}
 		} catch (e) {
-			logout()
-			history.push('/login')
+			if (e.message === 'Текущая сессия закончилась') {
+				setTimeout(() => {
+					logout()
+					history.push('/login')
+				}, 1000)
+			}
 		}
-	}, [logout, history, isTeacher, request, token, isAdmin])
+	}, [logout, history, isTeacher, request, token])
+
+	const getFeedback = useCallback(async () => {
+		try {
+			if (isTeacher) {
+				const getTeacherFeedback = await request('/api/feedback/teacherFeedback', 'GET', null, {Authorization: `Bearer ${token}`})
+				if (!teacherFeedback.length) {
+					setTeacherFeedback(getTeacherFeedback)
+				} else if (teacherFeedback.length !== getTeacherFeedback.length) {
+					if (teacherFeedback.length < getTeacherFeedback.length) {
+						message('Пришел новый отклик')
+						let newFeedback = [...getTeacherFeedback]
+						newFeedback.splice(0, teacherFeedback.length)
+						const updateFeedback = [...teacherFeedback, ...newFeedback]
+						setTeacherFeedback(updateFeedback)
+					} else {
+						message('Отклик удален')
+						const newId = getTeacherFeedback.map(item => item._id)
+						setTeacherFeedback(teacherFeedback.filter(item => newId.some(id => id === item._id)))
+					}
+				}
+			} else {
+				if (!isAdmin) {
+					const getFeedbackFetch = await request('/api/feedback/personal', 'GET', null, {Authorization: `Bearer ${token}`})
+					console.log(getFeedbackFetch)
+					if (!feedback.length) {
+						console.log(2)
+						setFeedback(getFeedbackFetch)
+					} else if (feedback.length < getFeedbackFetch.length) {
+						console.log(3)
+						let newFeedback = [...getFeedbackFetch]
+						newFeedback.splice(0, feedback.length)
+						const updateFeedback = [...feedback, ...newFeedback]
+						setFeedback(updateFeedback)
+					} else if (feedback.length > getFeedbackFetch.length) {
+						console.log(4)
+						message('Отклик удален')
+						const newId = getFeedbackFetch.map(item => item._id)
+						setFeedback(feedback.filter(item => newId.some(id => id === item._id)))
+					} else if (JSON.stringify(feedback) !== JSON.stringify(getFeedbackFetch)) {
+						console.log(5)
+						let updateFeedback = feedback.map((item, index) => {
+							// if (item.response !== getFeedbackFetch[index].response) {
+							// 	item = {...item, response: getFeedbackFetch[index].response}
+							// }
+							// if (item.rejection !== getFeedbackFetch[index].rejection) {
+							// 	item = {...item, rejection: getFeedbackFetch[index].rejection}
+							// }
+							// if (item.teacherPhone !== getFeedbackFetch[index].teacherPhone) {
+							// 	item = {...item, teacherPhone: getFeedbackFetch[index].teacherPhone}
+							// }
+							// if (item.answer !== getFeedbackFetch[index].answer) {
+							// 	item = {...item, answer: getFeedbackFetch[index].answer}
+							// }
+
+							for (const key in item) {
+								if (typeof(item[key]) !== 'object' ) {
+									if (item[key] !== getFeedbackFetch[index][key]) {
+										item = {...item, [key]: getFeedbackFetch[index][key]}
+									}
+								}
+							}
+							return item
+						})
+						setFeedback(updateFeedback)
+					}
+				}
+			}
+		} catch (e) {
+			if (e.message === 'Текущая сессия закончилась') {
+				setTimeout(() => {
+					logout()
+					history.push('/login')
+				}, 1000)
+			}
+		}
+	}, [logout, history, isTeacher, request, token, isAdmin, feedback, teacherFeedback, message])
 
 	useEffect(() => {
 		getPersonalInfo()
 	}, [getPersonalInfo]);
+
+	useEffect(() => {
+		getFeedback()
+		const intervalGetFeedback = setInterval(() => {
+			getFeedback()
+		}, 10000)
+
+		return () => clearInterval(intervalGetFeedback)
+	}, [getFeedback])
 
 	const deleteForm = async (id) => {
 		try {
@@ -71,6 +157,26 @@ const PersonalArea = () => {
 
 	const changeName = (newName) => {
 		setUser(newName)
+	}
+
+	const changeRejection = (id) => {
+		let updateTeacherFeedback = teacherFeedback.map(item => {
+			if (item._id === id) {
+				return {...item, rejection: true}
+			}
+			return item
+		})
+		setTeacherFeedback(updateTeacherFeedback)
+	}
+
+	const changeResponse = (id) => {
+		let updateTeacherFeedback = teacherFeedback.map(item => {
+			if (item._id === id) {
+				return {...item, response: true}
+			}
+			return item
+		})
+		setTeacherFeedback(updateTeacherFeedback)
 	}
 
 	const rights = () => {
@@ -119,7 +225,8 @@ const PersonalArea = () => {
 						<PersonalProfiles forms={forms} deleteForm={deleteForm}/>
 					</div>
 					<div id="notification" className="col s12">
-						Уведомления об откликах
+						<Feedback feedback={teacherFeedback} changeRejection={changeRejection}
+						          changeResponse={changeResponse}/>
 					</div>
 				</>
 			)
@@ -138,7 +245,7 @@ const PersonalArea = () => {
 						<Feedback feedback={feedback}/>
 					</div>
 					<div id="notification" className="col s12">
-						Уведомления о решениях
+						Уведомления
 					</div>
 				</>
 			)
@@ -149,7 +256,9 @@ const PersonalArea = () => {
 		if (loading && flag) {
 			return <LoaderCircular/>
 		} else {
-			M.Tabs.init(tabsRes.current);
+			if (flag) {
+				M.Tabs.init(tabsRes.current);
+			}
 			return (
 				<>
 					<h1>{user}</h1>

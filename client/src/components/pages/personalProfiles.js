@@ -42,11 +42,11 @@ const PersonalProfiles = ({forms, deleteForm}) => {
 								<p className=''>{normalizePrice(form.price)}</p>
 							</div>
 							<div className="card-action">
-								<Link to={`/editForm/${form._id}`} className='black-text edit-link-custom'>
-									<i className='material-icons'>edit</i>
+								<Link to={`/editForm/${form._id}`} className='blue-text darken-1'>
+									Редактировать
 								</Link>
 								<Link
-									className='blue-text darken-1 margin-left-custom'
+									className='blue-text darken-1'
 									to={`/questionnairesDetail/${form._id}`}
 								>
 									Открыть

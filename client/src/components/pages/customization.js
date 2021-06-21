@@ -252,6 +252,7 @@ const Customization = ({changeName}) => {
 					<button data-target="confirmation" className="btn red white-text modal-trigger margin-top-custom">Удалить аккаунт</button>
 				</div>
 			</div>
+
 			<div id="confirmation" className="modal">
 				<div className="modal-content">
 					<h4>Вы действительно хотите удалить свой аккаунт?</h4>

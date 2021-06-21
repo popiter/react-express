@@ -69,6 +69,7 @@ router.get(
 						select: 'FULL_NAME -_id'
 					}
 				})
+				.populate('user', 'FULL_NAME -_id')
 
 			res.json(responses)
 		} catch (e) {
@@ -86,16 +87,51 @@ router.get(
 			const feedback = await Feedback.find(
 				{form: {$in: arrFormId}},
 				{
-					'answer': 1,
 					'date': 1,
-					'userPhone': 1,
+					'response': 1,
+					'rejection': 1,
 					'transmittalLetter': 1,
-					'teacherPhone': 1
+					'teacherPhone': 1,
+					'userPhone': 1,
+					'answer': 1
+				})
+				.populate({
+					path: 'form',
+					select: 'teacher img price subjects',
+					populate: {
+						path: 'teacher',
+						select: 'FULL_NAME -_id'
+					}
 				})
 				.populate('user', 'FULL_NAME -_id')
-				.populate('form', 'subjects price -_id')
 
 			res.json(feedback)
+		} catch (e) {
+			res.status(500).json({message: 'Что-то пошло не так'})
+		}
+	})
+
+router.post('/rejectionTeacher',
+	auth,
+	async (req, res) => {
+		try {
+			await Feedback.findByIdAndUpdate(req.body.id, {rejection: true})
+
+			res.json({message: 'Отклик успешно отказан'})
+		} catch (e) {
+			res.status(500).json({message: 'Что-то пошло не так'})
+		}
+	})
+
+router.post('/responseTeacher',
+	auth,
+	async (req, res) => {
+		try {
+			const {id} = req.body
+			delete req.body.id
+			await Feedback.findByIdAndUpdate(id, req.body)
+
+			res.json({message: 'Собщение отправлено'})
 		} catch (e) {
 			res.status(500).json({message: 'Что-то пошло не так'})
 		}
