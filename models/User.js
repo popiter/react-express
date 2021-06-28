@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
 	isAdmin: {type: Boolean, default: false}
 })
 
-schema.pre('remove', function (next){
+schema.pre('remove', function (next) {
 	Form.deleteMany({teacher: this._id}).exec()
 	Feedback.deleteMany({user: this._id}).exec()
 	next()

@@ -21,11 +21,12 @@ const schema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	// телефон учителя
 	teacherPhone: {
 		type: String,
 		default: ''
 	},
-	// id поста на который откликнулись
+	// id анкеты на которую откликнулись
 	form: {
 		type: mongoose.Types.ObjectId,
 		ref: 'Form'

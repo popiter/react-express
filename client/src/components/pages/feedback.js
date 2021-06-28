@@ -152,7 +152,7 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 									{feed.answer.length ? `${feed.form.teacher.FULL_NAME}: ${feed.answer}` : null}
 									{feed.teacherPhone ?
 										<a href={`tel:+7${feed.teacherPhone}`}>
-											{`8${feed.teacherPhone}`}
+											{` 8${feed.teacherPhone}`}
 										</a> : null}
 								</p>
 								{checkRes(feed.response, feed.rejection)}

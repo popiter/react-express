@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const {check, validationResult} = require('express-validator')
 const auth = require('../middleware/auth.middleware')
 const User = require('../models/User')
+const Feedback = require('../models/Feedback')
 const router = Router()
 
 router.get(
@@ -178,6 +179,15 @@ router.post(
 	auth,
 	async (req, res) => {
 		try {
+			const allFeedback = await Feedback.find(
+				{},
+				{'form': 1})
+				.populate({
+					path: 'form',
+					select: 'teacher'
+				})
+			const idTeacherForm = allFeedback.filter(item => `${item.form.teacher}` === req.user.userId).map(item => item.form._id)
+			await Feedback.deleteMany({form: {$in: idTeacherForm} })
 			await User.findById(req.user.userId, function (err, user) {
 				user.remove()
 				res.json({message: 'Аккаунт успешно удален'})

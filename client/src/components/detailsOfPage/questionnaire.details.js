@@ -105,8 +105,8 @@ const QuestionnaireDetails = ({form}) => {
 				history.push('/questionnaires')
 			}, 500)
 			setForm({
-				test: '',
-				phone: ''
+				transmittalLetter: '',
+				userPhone: ''
 			})
 		} catch (e) {
 			if (e.message === 'Текущая сессия закончилась') {
@@ -172,9 +172,9 @@ const QuestionnaireDetails = ({form}) => {
 							id="transmittalLetter"
 							className="materialize-textarea blue-textarea black-text"
 							name='transmittalLetter'
+							value={postForm.transmittalLetter}
 							onChange={changeHandler}
 							placeholder='Введите сообщение для преподавателя'
-							value={postForm.transmittalLetter}
 						/>
 						<label htmlFor="transmittalLetter">Сопроводительное письмо</label>
 						<button
