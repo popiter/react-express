@@ -18,11 +18,17 @@ const NavBar = () => {
 		M.Sidenav.init(elems);
 	}, []);
 
-
+	/**
+	 * Выход
+	 */
 	const logoutHandler = () => {
 		logout()
 	}
 
+	/**
+	 * Определение ссылок для конкретных пользователей
+	 * @returns {JSX.Element}
+	 */
 	const role = () => {
 		if (isAuthenticated) {
 			if (isTeacher) {

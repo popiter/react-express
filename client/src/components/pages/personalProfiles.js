@@ -16,6 +16,11 @@ const DeleteBtn = styled.button`
 `
 
 const PersonalProfiles = ({forms, deleteForm}) => {
+	/**
+	 * Форматирование цены
+	 * @param price
+	 * @returns {string}
+	 */
 	const normalizePrice = (price) => {
 		return new Intl.NumberFormat('ru-RU', {
 			currency: 'rub',

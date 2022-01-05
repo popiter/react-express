@@ -113,6 +113,10 @@ textarea.blue-textarea:focus {
     margin-bottom: 40px;
 }
 
+.margin-right-custom {
+    margin-right: 30px;
+}
+
 .padding-top-custom {
     padding-top: 5px;
 }

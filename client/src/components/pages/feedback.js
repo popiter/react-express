@@ -26,7 +26,7 @@ const ButtonFailure = styled.button`
 
 const Feedback = ({feedback, changeRejection, changeResponse}) => {
 	const {request} = useHttp()
-	const {isTeacher, logout, token} = useContext(AuthContext);
+	const {token, logout, isTeacher} = useContext(AuthContext);
 	const message = useMessage()
 	const history = useHistory()
 	const formMessage = 'Обратная связь будет дана в ближайшие время'
@@ -41,6 +41,11 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 		M.Modal.init(document.querySelectorAll('.modal'));
 	}, []);
 
+	/**
+	 * Форматирование даты
+	 * @param date
+	 * @returns {string}
+	 */
 	const toDate = date => {
 		return new Intl.DateTimeFormat('ru-RU', {
 			day: '2-digit',
@@ -49,6 +54,11 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 		}).format(new Date(date))
 	}
 
+	/**
+	 * Форматирование цены
+	 * @param price
+	 * @returns {string}
+	 */
 	const toCurrency = price => {
 		return new Intl.NumberFormat('ru-RU', {
 			currency: 'rub',
@@ -56,6 +66,12 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 		}).format(price)
 	}
 
+	/**
+	 * Проверка есть ли положительные или отрицительные ответы на отклик
+	 * @param response положительный овтет
+	 * @param rejection отрицательный ответ
+	 * @returns {JSX.Element}
+	 */
 	const checkRes = (response, rejection) => {
 		if (response) {
 			return (
@@ -84,6 +100,11 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 		}
 	}
 
+	/**
+	 * Отрицательный овтет от учителя (POST запрос)
+	 * @param id
+	 * @returns {Promise<void>}
+	 */
 	const rejectionTeacher = async (id) => {
 		try {
 			const data = await request(
@@ -103,10 +124,19 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 		}
 	}
 
+	/**
+	 * Изменение полей в state
+	 * @param event
+	 */
 	const changeHandler = (event) => {
 		setPostFeedBack({...postFeedBack, [event.target.name]: event.target.value})
 	}
 
+	/**
+	 * Положительный овтет от учителя (POST запрос)
+	 * @param id
+	 * @returns {Promise<void>}
+	 */
 	const responseTeacher = async (id) => {
 		try {
 			const data = await request(
@@ -126,6 +156,10 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 		}
 	}
 
+	/**
+	 * Рендер откликов
+	 * @returns {JSX.Element}
+	 */
 	const renderFeedback = () => {
 		return (
 			<ul className='collection'>

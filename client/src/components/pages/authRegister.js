@@ -26,15 +26,24 @@ const AuthRegister = () => {
 	}, [error, message, clearError]);
 
 	useEffect(() => {
+		document.title = 'Регистрация'
 		window.M.updateTextFields()
 	}, []);
 
 	const [isTeacher, setIsTeacher] = useState(false);
 
+	/**
+	 * Изменение полей в State
+	 * @param event
+	 */
 	const changeHandler = event => {
 		setForm({...form, [event.target.name]: event.target.value})
 	}
 
+	/**
+	 * Регистрация пользователя
+	 * @returns {Promise<void>}
+	 */
 	const registerHandler = async () => {
 		try {
 			const data = await request('/api/auth/register', 'POST', {...form, isTeacher})

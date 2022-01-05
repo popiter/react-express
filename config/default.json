@@ -1,6 +1,7 @@
 {
   "port": 5000,
-  "mongoUri": "mongodb+srv://Dmitriy:DbvAzWe68JW1KENe@cluster0.mwqdz.mongodb.net/app?retryWrites=true&w=majority",
-  "mongoPassword": "DbvAzWe68JW1KENe",
-  "jwtSecret": "DbvAzWe68JW1KENe"
+  "mongoUri": "mongodb+srv://Dmitriy:ufrO1sdpBionXMfk@cluster0.mwqdz.mongodb.net/app?retryWrites=true&w=majority",
+  "mongoPassword": "unvmkH4J9XIHruIQ",
+  "jwtSecret": "DbvAzWe68JW1KENe",
+  "2": "unvmkH4J9XIHruIQ"
 }

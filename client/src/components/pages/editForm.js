@@ -9,6 +9,10 @@ const EditForm = () => {
 	const [form, setForm] = useState(null);
 	const formId = useParams().id
 
+	/**
+	 * Получение формы по id
+	 * @type {(function(): Promise<void>)|*}
+	 */
 	const getForm = useCallback(async () => {
 			try {
 				const data = await request(`/api/form/${formId}`, 'GET', null, {})
@@ -19,6 +23,7 @@ const EditForm = () => {
 	);
 
 	useEffect(() => {
+		document.title = 'Создание анкеты'
 		getForm()
 	}, [getForm]);
 

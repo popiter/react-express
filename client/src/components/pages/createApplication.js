@@ -42,10 +42,6 @@ const CreateApplication = () => {
 	});
 	const [img, setImg] = useState('');
 
-	const changeHandler = event => {
-		setForm({...form, [event.target.name]: event.target.value})
-	}
-
 	useEffect(() => {
 		window.M.updateTextFields()
 	}, []);
@@ -55,15 +51,37 @@ const CreateApplication = () => {
 		clearError()
 	}, [error, message, clearError]);
 
+	/**
+	 * Изменение полей в State
+	 * @param event
+	 */
+	const changeHandler = event => {
+		setForm({...form, [event.target.name]: event.target.value})
+	}
+
+	/**
+	 * Сохранение фото в State
+	 * @param e
+	 * @returns {Promise<void>}
+	 */
 	const uploadImage = async (e) => {
 		const file = e.target.files[0]
 		const base64 = await convertBase64(file)
 		setImg(base64)
 	}
 
+	/**
+	 * КОнвертация фото в base 64
+	 * @param file
+	 * @returns {Promise<unknown>}
+	 */
 	const convertBase64 = file => {
 		return new Promise((resolve, reject) => {
 			const fileReader = new FileReader()
+			if (!file) {
+				setImg('')
+				return
+			}
 			fileReader.readAsDataURL(file)
 
 			fileReader.onload = () => {
@@ -76,6 +94,10 @@ const CreateApplication = () => {
 		})
 	}
 
+	/**
+	 * Валидация полей перед отправкой
+	 * @returns {boolean|void|*}
+	 */
 	const validate = () => {
 		if (!img) {
 			return message('Фото явлется обязательным полем')
@@ -87,6 +109,10 @@ const CreateApplication = () => {
 		return true
 	}
 
+	/**
+	 * Отправка анкеты
+	 * @returns {Promise<void>}
+	 */
 	const sendForm = async () => {
 		if (validate()) {
 			try {

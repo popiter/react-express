@@ -26,14 +26,22 @@ const AuthLogin = () => {
 	}, [error, message, clearError]);
 
 	useEffect(() => {
+		document.title = 'Авторизация'
 		window.M.updateTextFields()
 	}, []);
 
-
+	/**
+	 * изменение полей в state
+	 * @param event
+	 */
 	const changeHandler = event => {
 		setForm({...form, [event.target.name]: event.target.value})
 	}
 
+	/**
+	 * Авторизация пользователя
+	 * @returns {Promise<void>}
+	 */
 	const loginHandler = async () => {
 		try {
 			const data = await request('/api/auth/login', 'POST', {...form})

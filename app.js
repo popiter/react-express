@@ -11,6 +11,7 @@ app.use('/api', require('./routes/isAuth'))
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/form', require('./routes/form.routes'))
 app.use('/api/feedback', require('./routes/feedback.routes'))
+app.use('/api/admin', require('./routes/admin.routes'))
 
 const PORT = config.get('port') || 5000
 

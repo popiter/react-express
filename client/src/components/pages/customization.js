@@ -36,10 +36,18 @@ const Customization = ({changeName}) => {
 		clearError()
 	}, [error, message, clearError]);
 
+	/**
+	 * Изменение пароля в state
+	 * @param event
+	 */
 	const changeHandlerPassword = event => {
 		setFormPassword({...formPassword, [event.target.name]: event.target.value})
 	}
 
+	/**
+	 * Валадация пароля
+	 * @returns {boolean|void|*}
+	 */
 	const validatePassword = () => {
 		if (!formPassword.password) {
 			return message('Поле старый пароль является обязательным')
@@ -51,6 +59,10 @@ const Customization = ({changeName}) => {
 		return true
 	}
 
+	/**
+	 * Изменение пароля (POST запрос)
+	 * @returns {Promise<void>}
+	 */
 	const updatePassword = async () => {
 		if (validatePassword()) {
 			try {
@@ -75,10 +87,18 @@ const Customization = ({changeName}) => {
 		}
 	}
 
+	/**
+	 * Изменение почты в state
+	 * @param event
+	 */
 	const changeHandlerEmail = event => {
 		setFormEmail({...formEmail, [event.target.name]: event.target.value})
 	}
 
+	/**
+	 * Валидация почты
+	 * @returns {boolean|void|*}
+	 */
 	const validateEmail = () => {
 		const reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 		if (!formEmail.email) {
@@ -93,6 +113,10 @@ const Customization = ({changeName}) => {
 		return true
 	}
 
+	/**
+	 * Изменение почты (POST запрос)
+	 * @returns {Promise<void>}
+	 */
 	const updateEmail = async () => {
 		if (validateEmail()) {
 			try {
@@ -117,10 +141,18 @@ const Customization = ({changeName}) => {
 		}
 	}
 
+	/**
+	 * Измение фамилии в state
+	 * @param event
+	 */
 	const changeHandlerFullName = event => {
 		setNewFullName(event.target.value)
 	}
 
+	/**
+	 * Изменение фамилии пользвателем (POST запрос)
+	 * @returns {Promise<void>}
+	 */
 	const updateFullName = async () => {
 		try {
 			const data = await request(
@@ -141,6 +173,10 @@ const Customization = ({changeName}) => {
 		}
 	}
 
+	/**
+	 * Удаление аккаунта пользователем (POST запрос)
+	 * @returns {Promise<void>}
+	 */
 	const deleteAccount = async () => {
 		try {
 			const data = await request('/api/auth/deleteAccount', 'POST', {}, {Authorization: `Bearer ${token}`})

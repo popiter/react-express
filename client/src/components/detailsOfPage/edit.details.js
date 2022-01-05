@@ -38,6 +38,7 @@ const EditDetails = ({form}) => {
 		subjects: form.subjects,
 		aboutMe: form.aboutMe
 	});
+	const [img, setImg] = useState(form.img);
 
 	const {request, loading} = useHttp()
 
@@ -47,18 +48,30 @@ const EditDetails = ({form}) => {
 		M.textareaAutoResize(elems)
 	}, []);
 
-	const [img, setImg] = useState(form.img);
-
+	/**
+	 * Измение полей в state
+	 * @param event
+	 */
 	const changeHandler = event => {
 		setForm({...currentForm, [event.target.name]: event.target.value})
 	}
 
+	/**
+	 * Сохранение фото в base64 в state
+	 * @param e
+	 * @returns {Promise<void>}
+	 */
 	const uploadImage = async (e) => {
 		const file = e.target.files[0]
 		const base64 = await convertBase64(file)
 		setImg(base64)
 	}
 
+	/**
+	 * конвертация фото в base64
+	 * @param file
+	 * @returns {Promise<unknown>}
+	 */
 	const convertBase64 = file => {
 		return new Promise((resolve, reject) => {
 			const fileReader = new FileReader()
@@ -74,6 +87,10 @@ const EditDetails = ({form}) => {
 		})
 	}
 
+	/**
+	 * Валидация полей перед отправкой анкеты
+	 * @returns {boolean|void|*}
+	 */
 	const validate = () => {
 		if (!img) {
 			return message('Фото явлется обязательным полем')
@@ -85,6 +102,10 @@ const EditDetails = ({form}) => {
 		return true
 	}
 
+	/**
+	 * Валадация на совпадение полей с уже опубликованной анкеты
+	 * @returns {boolean|void|*}
+	 */
 	const coincidences = () => {
 		if (+currentForm.price !== form.price
 			|| currentForm.subjects !== form.subjects
@@ -96,6 +117,10 @@ const EditDetails = ({form}) => {
 		return message('Все поля совпадают с текущей опубликованной анкетой')
 	}
 
+	/**
+	 * отправка обновленной анкетой
+	 * @returns {Promise<void>}
+	 */
 	const sendForm = async () => {
 		if (validate() && coincidences()) {
 			try {

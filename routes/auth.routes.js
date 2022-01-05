@@ -158,7 +158,6 @@ router.post(
 	auth,
 	async (req, res) => {
 		try {
-
 			const {newFullName} = req.body
 			const user = await User.findById(req.user.userId)
 
@@ -187,7 +186,9 @@ router.post(
 					select: 'teacher'
 				})
 			const idTeacherForm = allFeedback.filter(item => `${item.form.teacher}` === req.user.userId).map(item => item.form._id)
-			await Feedback.deleteMany({form: {$in: idTeacherForm} })
+			if (idTeacherForm.length) {
+				await Feedback.deleteMany({form: {$in: idTeacherForm} })
+			}
 			await User.findById(req.user.userId, function (err, user) {
 				user.remove()
 				res.json({message: 'Аккаунт успешно удален'})

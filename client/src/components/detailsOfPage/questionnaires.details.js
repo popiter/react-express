@@ -2,6 +2,12 @@ import React from 'react';
 import {Link} from "react-router-dom";
 
 const QuestionnairesDetails = ({forms}) => {
+
+	/**
+	 * Форматирование цены
+	 * @param price
+	 * @returns {string}
+	 */
 	const normalizePrice = (price) => {
 		return new Intl.NumberFormat('ru-RU', {
 			currency: 'rub',

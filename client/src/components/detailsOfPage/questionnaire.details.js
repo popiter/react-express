@@ -6,6 +6,7 @@ import useHttp from "../../hooks/http.hook";
 import M from "materialize-css";
 import useAuth from "../../hooks/auth.hook";
 import {useHistory} from "react-router-dom";
+import moment from "moment";
 
 const Card = styled.div`
   padding-top: 30px;
@@ -63,18 +64,14 @@ const QuestionnaireDetails = ({form}) => {
 		transmittalLetter: '',
 		userPhone: ''
 	});
-
-	const toCurrency = price => {
-		return new Intl.NumberFormat('ru-RU', {
-			currency: 'rub',
-			style: 'currency'
-		}).format(price)
-	}
+	const [adminMessage, setAdminMessage] = useState('');
 
 	useEffect(() => {
+		if (window.matchMedia('only screen and (min-width: 1023px)').matches) {
+			M.Tooltip.init(document.querySelectorAll('.tooltipped'))
+		}
 		window.M.updateTextFields()
-		const modal = document.querySelectorAll('.modal');
-		M.Modal.init(modal);
+		M.Modal.init(document.querySelectorAll('.modal'))
 	}, []);
 
 	useEffect(() => {
@@ -82,6 +79,11 @@ const QuestionnaireDetails = ({form}) => {
 		clearError()
 	}, [error, message, clearError]);
 
+	/**
+	 * Форматирование даты
+	 * @param date
+	 * @returns {string}
+	 */
 	const toDate = date => {
 		return new Intl.DateTimeFormat('ru-RU', {
 			day: '2-digit',
@@ -90,10 +92,30 @@ const QuestionnaireDetails = ({form}) => {
 		}).format(new Date(date))
 	}
 
+	/**
+	 * Форматирование цены
+	 * @param price
+	 * @returns {string}
+	 */
+	const toCurrency = price => {
+		return new Intl.NumberFormat('ru-RU', {
+			currency: 'rub',
+			style: 'currency'
+		}).format(price)
+	}
+
+	/**
+	 * Изменение state postForm у пользователя
+	 * @param event
+	 */
 	const changeHandler = event => {
 		setForm({...postForm, [event.target.name]: event.target.value})
 	}
 
+	/**
+	 * Создание отклика на анкету пользователем
+	 * @returns {Promise<void>}
+	 */
 	const createFeedback = async () => {
 		try {
 			const data = await request('/api/feedback/create', 'POST', {
@@ -115,6 +137,82 @@ const QuestionnaireDetails = ({form}) => {
 					history.push('/login')
 				}, 1000)
 			}
+		}
+	}
+
+	/**
+	 * Удаление анкеты админом
+	 * @returns {Promise<void>}
+	 */
+	const adminDeleteForm = async () => {
+		try {
+			const data = await request('/api/form/delete', 'POST', {id: form._id}, {Authorization: `Bearer ${token}`})
+			message(data.message)
+			history.push('/questionnaires')
+		} catch (e) {
+			if (e.message === 'Текущая сессия закончилась') {
+				setTimeout(() => {
+					logout()
+					history.push('/login')
+				}, 1000)
+			}
+		}
+	}
+
+	/**
+	 * Создание нового сообщения для пользователя
+	 * @returns {Promise<void>}
+	 */
+	const createNewMessageOnForm = async () => {
+		if (!adminMessage) {
+			message('Заполните поле сообщение')
+		} else {
+			try {
+				const data = await request(
+					'/api/admin/createNewMessageOnForm',
+					'POST',
+					{
+						idForm: form._id,
+						idUser: form.teacher._id,
+						adminMessage,
+						dateSentByAdmin: moment().utc().format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
+					},
+					{Authorization: `Bearer ${token}`})
+				message(data.message)
+				setAdminMessage('')
+			} catch (e) {
+				if (e.message === 'Текущая сессия закончилась') {
+					setTimeout(() => {
+						logout()
+						history.push('/login')
+					}, 1000)
+				}
+			}
+		}
+	}
+
+	/**
+	 * Кнопки для админа
+	 * @returns {JSX.Element}
+	 */
+	const adminButton = () => {
+		if (isAdmin) {
+			return (
+				<>
+					<button
+						data-position="top"
+						data-tooltip="Не удалять без веской причины"
+						data-target="deleteForm"
+						className='btn-custom btn white-text red tooltipped modal-trigger'>
+						Удалить
+					</button>
+					<button
+						data-target='messageOnForm'
+						className='btn-custom btn white-text yellow darken-4 margin-right-custom modal-trigger'>
+						Отправить сообщение
+					</button>
+				</>
+			)
 		}
 	}
 
@@ -142,16 +240,60 @@ const QuestionnaireDetails = ({form}) => {
 				</div>
 				<div className="card__footer">
 					<h5>{form.aboutMe}</h5>
+					{adminButton()}
 					{!isAuthenticated
 					|| isTeacher
 					|| isAdmin ? null :
 						<button
 							data-target="feedback"
-							className='btn-custom modal-trigger btn white-text blue darken-1 btn-large'>
+							className='btn-custom modal-trigger btn white-text blue darken-1'>
 							Откликнуться
 						</button>}
 				</div>
 			</Card>
+
+			<div id="messageOnForm" className='modal'>
+				<div className="modal-content">
+					<h4>Оставить сообщение на анкету</h4>
+					<div className="input-field">
+						<input
+							placeholder="Введите сообщение"
+							id="message"
+							type="text"
+							name='message'
+							className='blue-textarea black-text'
+							value={adminMessage}
+							onChange={(e) => setAdminMessage(e.target.value)}
+						/>
+						<label htmlFor="message">Сообщение</label>
+					</div>
+				</div>
+
+				<div className="modal-footer">
+					<button
+						className={`${adminMessage ? 'modal-close' : null} btn red white-text btn-flat`}
+						onClick={createNewMessageOnForm}
+					>
+						Отправить
+					</button>
+				</div>
+			</div>
+
+			<div id='deleteForm' className="modal">
+				<div className="modal-content">
+					<h4>Действительно удалить анкету? Ее нельзя будет восстановить</h4>
+				</div>
+
+				<div className="modal-footer">
+					<button
+						className={`modal-close btn red white-text btn-flat`}
+						onClick={adminDeleteForm}
+					>
+						Удалить
+					</button>
+				</div>
+			</div>
+
 			<div id="feedback" className="modal">
 				<div className="modal-content">
 					<h4 style={{marginBottom: '30px'}}>Отклик на анкету</h4>
