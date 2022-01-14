@@ -6,7 +6,8 @@ import {
 	DetailQuestionnaire, EditForm,
 	Home,
 	PersonalArea,
-	Questionnaires
+	Questionnaires,
+	AllUsers
 } from "../pages";
 import AuthRegister from "../pages/authRegister";
 import Error from "../error";
@@ -47,7 +48,7 @@ const Routes = (isAuthenticated, isTeacher, isAdmin) => {
 						<Questionnaires/>
 					</Route>
 					<Route path="/allUsers" exact>
-						Все пользователи
+						<AllUsers />
 					</Route>
 					<Route path="/questionnairesDetail/:id">
 						<DetailQuestionnaire/>

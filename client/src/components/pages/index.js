@@ -8,6 +8,7 @@ import PersonalProfiles from "./personalProfiles";
 import DetailQuestionnaire from "./detailQuestionnaire";
 import Customization from "./customization";
 import EditForm from "./editForm";
+import AllUsers from './allUsers'
 export {
 	AuthLogin,
 	Feedback,
@@ -18,5 +19,6 @@ export {
 	PersonalProfiles,
 	DetailQuestionnaire,
 	Customization,
-	EditForm
+	EditForm,
+	AllUsers
 }

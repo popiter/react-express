@@ -81,6 +81,7 @@ const Customization = ({changeName}) => {
 				if (e.message === 'Текущая сессия закончилась') {
 					setTimeout(() => {
 						logout()
+						history.push('/login')
 					}, 1000)
 				}
 			}
@@ -135,6 +136,7 @@ const Customization = ({changeName}) => {
 				if (e.message === 'Текущая сессия закончилась') {
 					setTimeout(() => {
 						logout()
+						history.push('/login')
 					}, 1000)
 				}
 			}
@@ -168,6 +170,7 @@ const Customization = ({changeName}) => {
 			if (e.message === 'Текущая сессия закончилась') {
 				setTimeout(() => {
 					logout()
+					history.push('/login')
 				}, 1000)
 			}
 		}
@@ -179,12 +182,12 @@ const Customization = ({changeName}) => {
 	 */
 	const deleteAccount = async () => {
 		try {
-			const data = await request('/api/auth/deleteAccount', 'POST', {}, {Authorization: `Bearer ${token}`})
+			const data = await request('/api/auth/deleteAccount', 'GET', null, {Authorization: `Bearer ${token}`})
 			message(data.message)
 			setTimeout(() => {
 				logout()
 				history.push('/register')
-			}, 2000)
+			}, 1000)
 		} catch (e) {
 			logout()
 			history.push('/login')

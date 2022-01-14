@@ -7,6 +7,7 @@ import M from "materialize-css";
 import useAuth from "../../hooks/auth.hook";
 import {useHistory} from "react-router-dom";
 import moment from "moment";
+import InputMask from 'react-input-mask'
 
 const Card = styled.div`
   padding-top: 30px;
@@ -118,8 +119,12 @@ const QuestionnaireDetails = ({form}) => {
 	 */
 	const createFeedback = async () => {
 		try {
+			const transformForm = {
+				transmittalLetter: postForm.transmittalLetter,
+				userPhone: postForm.userPhone.slice(3, postForm.userPhone.length).replace(/[^\d]/g, '')
+			}
 			const data = await request('/api/feedback/create', 'POST', {
-				...postForm,
+				...transformForm,
 				form: form._id
 			}, {Authorization: `Bearer ${token}`})
 			message(data.message)
@@ -137,6 +142,10 @@ const QuestionnaireDetails = ({form}) => {
 					history.push('/login')
 				}, 1000)
 			}
+			setForm({
+				transmittalLetter: '',
+				userPhone: ''
+			})
 		}
 	}
 
@@ -249,6 +258,13 @@ const QuestionnaireDetails = ({form}) => {
 							className='btn-custom modal-trigger btn white-text blue darken-1'>
 							Откликнуться
 						</button>}
+					{isTeacher ?
+						<button
+							onClick={() => history.push(`/editForm/${form._id}`)}
+							className='btn-custom modal-trigger btn white-text blue darken-1'>
+							Изменить
+						</button> : null
+					}
 				</div>
 			</Card>
 
@@ -281,7 +297,7 @@ const QuestionnaireDetails = ({form}) => {
 
 			<div id='deleteForm' className="modal">
 				<div className="modal-content">
-					<h4>Действительно удалить анкету? Ее нельзя будет восстановить</h4>
+					<h4>Вы действительно хотите удалить анкету? Ее нельзя будет восстановить</h4>
 				</div>
 
 				<div className="modal-footer">
@@ -298,8 +314,9 @@ const QuestionnaireDetails = ({form}) => {
 				<div className="modal-content">
 					<h4 style={{marginBottom: '30px'}}>Отклик на анкету</h4>
 					<div className="input-field">
-						<input
-							placeholder="Введите телефон формата +7 (***)-***-**-**"
+						<InputMask
+							mask='+7 (999) 999-99-99'
+							placeholder="Введите номер телефона"
 							id="userPhone"
 							type="tel"
 							name='userPhone'

@@ -173,7 +173,7 @@ router.post(
 		}
 	})
 
-router.post(
+router.get(
 	'/deleteAccount',
 	auth,
 	async (req, res) => {

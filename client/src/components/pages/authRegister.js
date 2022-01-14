@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import useHttp from "../../hooks/http.hook";
 import styled from "styled-components";
 import useMessage from "../../hooks/message.hook";
 import {useHistory} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext";
 
 const Button = styled.button`
   color: #000;
@@ -12,6 +13,7 @@ const Button = styled.button`
 
 const AuthRegister = () => {
 	const history = useHistory()
+	const auth = useContext(AuthContext);
 	const message = useMessage()
 	const {loading, error, request, clearError} = useHttp()
 	const [form, setForm] = useState({
@@ -46,11 +48,14 @@ const AuthRegister = () => {
 	 */
 	const registerHandler = async () => {
 		try {
-			const data = await request('/api/auth/register', 'POST', {...form, isTeacher})
-			message(data.message)
-			setTimeout(() => {
-				history.push('/login')
-			}, 2000)
+			const reg = await request('/api/auth/register', 'POST', {...form, isTeacher})
+			message(reg.message)
+			const log = await request('/api/auth/login', 'POST', {...form})
+			auth.login(log.token, log.userId, log.isTeacher, log.isAdmin)
+			history.push('/personalArea#customization')
+			// setTimeout(() => {
+			// 	history.push('/login')
+			// }, 2000)
 		} catch (e) {
 		}
 	}

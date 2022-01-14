@@ -8,11 +8,6 @@ const router = Router()
 router.post(
 	'/create',
 	auth,
-	[
-		check('userPhone', 'Некоректный номер телефона')
-			.exists()
-			.isLength({min: 10, max: 10})
-	],
 	async (req, res) => {
 		try {
 			const errors = validationResult(req)

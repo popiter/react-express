@@ -20,16 +20,6 @@ const schema = new mongoose.Schema({
 		type: String,
 		default: ''
 	},
-	// сообщение пользователя
-	userMessage: {
-		type: String,
-		default: ''
-	},
-	// выполнена ли просьба админа
-	decided: {
-		type: Boolean,
-		default: false
-	},
 	// удалено ли уведомление пользователем
 	deleteMessageByUser: {
 		type: Boolean,
@@ -40,11 +30,6 @@ const schema = new mongoose.Schema({
 		type: Date,
 		default: ''
 	},
-	// дата отправки сообщение пользователем
-	dateSentByUser: {
-		type: Date,
-		default: ''
-	}
 })
 
 module.exports = mongoose.model('AdminMessage', schema)

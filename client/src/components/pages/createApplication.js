@@ -43,6 +43,7 @@ const CreateApplication = () => {
 	const [img, setImg] = useState('');
 
 	useEffect(() => {
+		document.title = 'Создание анкеты'
 		window.M.updateTextFields()
 	}, []);
 

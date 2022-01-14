@@ -46,6 +46,10 @@ textarea.blue-textarea {
     box-shadow: 0 1px 0 0 #2196F3 !important;
 }
 
+.input-field.blue-prefix .prefix.active {
+    color: #2196F3 !important;
+}
+
 input.blue-textarea + label,
 textarea.blue-textarea + label {
     color: #2196F3 !important;
@@ -131,4 +135,22 @@ textarea.blue-textarea:focus {
     left: 15px;
     z-index: 100;
     cursor: pointer;
+}
+
+.toast {
+    background-color: #f50057;
+}
+
+@keyframes anime {
+    0% {
+        transform: translate(0px, 100px);
+    }
+
+    50% {
+        transform: translate(0px, -10px);
+    }
+
+    100% {
+        transform: translate(0px, 0px);
+    }
 }

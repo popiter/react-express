@@ -23,7 +23,7 @@ const EditForm = () => {
 	);
 
 	useEffect(() => {
-		document.title = 'Создание анкеты'
+		document.title = 'Изменение анкеты'
 		getForm()
 	}, [getForm]);
 

@@ -119,6 +119,7 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 			if (e.message === 'Текущая сессия закончилась') {
 				setTimeout(() => {
 					logout()
+					history.push('/login')
 				}, 1000)
 			}
 		}
@@ -151,6 +152,7 @@ const Feedback = ({feedback, changeRejection, changeResponse}) => {
 			if (e.message === 'Текущая сессия закончилась') {
 				setTimeout(() => {
 					logout()
+					history.push('/login')
 				}, 1000)
 			}
 		}

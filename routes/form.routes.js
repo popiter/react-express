@@ -60,6 +60,29 @@ router.get(
 	}
 )
 
+router.get(
+	'/searchForms',
+	async (req, res) => {
+		try {
+			console.log(req.query.search)
+			const search = new RegExp(req.query.search, 'gi')
+			const forms = await Form.find(
+				{'subjects': search},
+				{
+					"_id": 1,
+					'price': 1,
+					'subjects': 1,
+					'teacher': 1
+				})
+				.populate('teacher', 'FULL_NAME -_id')
+
+			res.json(forms)
+		} catch (e) {
+			res.status(500).json({message: 'Что пошло не так'})
+		}
+	}
+)
+
 router.post(
 	'/delete',
 	auth,

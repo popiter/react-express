@@ -131,7 +131,7 @@ const EditDetails = ({form}) => {
 					{Authorization: `Bearer ${token}`})
 				message(data.message)
 				setTimeout(() => {
-					history.push('/personalArea#personalProfiles')
+					history.push(`/questionnairesDetail/${form._id}`)
 				}, 500)
 			} catch (e) {
 				if (e.message === 'Текущая сессия закончилась') {
@@ -213,7 +213,7 @@ const EditDetails = ({form}) => {
 							onClick={sendForm}
 							disabled={loading}
 						>
-							Редактировать анкету
+							Изменить
 						</Button>
 					</div>
 				</div>

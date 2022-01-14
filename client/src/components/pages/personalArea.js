@@ -11,6 +11,11 @@ import useMessage from "../../hooks/message.hook";
 import {Feedback} from "./index";
 import Notification from "./notification";
 
+const animationTabs = {
+    animation: '1s ease anime'
+    // animation: '1s ease 0s 1 normal none running anime'
+}
+
 const PersonalArea = () => {
         useIsAuth(true)
         const message = useMessage()
@@ -153,7 +158,7 @@ const PersonalArea = () => {
                         }, 1000)
                     }
                 }
-            }, []
+            }, [history, isAdmin, logout, token, request]
         )
 
         useEffect(() => {
@@ -184,8 +189,35 @@ const PersonalArea = () => {
                 message(data.message)
                 setForms(forms.filter((form) => form._id !== id))
             } catch (e) {
-                logout()
-                history.push('/login')
+                if (e.message === 'Текущая сессия закончилась') {
+                    setTimeout(() => {
+                        logout()
+                        history.push('/login')
+                    }, 1000)
+                }
+            }
+        }
+
+        /**
+         * Удаление уведомления от админа
+         * @returns {Promise<void>}
+         */
+        const deleteMessageAdmin = async (id) => {
+            try {
+                const data = await request('/api/admin/deleteAdminMessage', 'POST', {id}, {Authorization: `Bearer ${token}`})
+                message(data.message)
+                const idx = adminMessage.findIndex(item => item._id === id)
+                setAdminMessage([
+                    ...adminMessage.slice(0, idx),
+                    ...adminMessage.slice(idx + 1)
+                ])
+            } catch (e) {
+                if (e.message === 'Текущая сессия закончилась') {
+                    setTimeout(() => {
+                        logout()
+                        history.push('/login')
+                    }, 1000)
+                }
             }
         }
 
@@ -289,36 +321,22 @@ const PersonalArea = () => {
             if (isTeacher) {
                 return (
                     <>
-                        <div id="personalProfiles" className="col s12">
+                        <div style={animationTabs} id="personalProfiles" className="col s12">
                             <PersonalProfiles forms={forms} deleteForm={deleteForm}/>
                         </div>
-                        <div id="personalResponses" className="col s12">
+                        <div style={animationTabs} id="personalResponses" className="col s12">
                             <Feedback feedback={feedback} changeRejection={changeRejection}
                                       changeResponse={changeResponse}/>
-                        </div>
-                        <div id="notification" className="col s12">
-                            <Notification adminMessage={adminMessage} />
-                            {/*<Feedback feedback={feedback} changeRejection={changeRejection}*/}
-                            {/*          changeResponse={changeResponse}/>*/}
                         </div>
                     </>
                 )
             } else if (isAdmin) {
-                return (
-                    <>
-                        <div id="notification" className="col s12">
-                            Уведомления от пользователей
-                        </div>
-                    </>
-                )
+                return
             } else {
                 return (
                     <>
-                        <div id="personalResponses" className="col s12">
+                        <div style={animationTabs} id="personalResponses" className="col s12">
                             <Feedback feedback={feedback}/>
-                        </div>
-                        <div id="notification" className="col s12">
-                            <Notification adminMessage={adminMessage} />
                         </div>
                     </>
                 )
@@ -362,7 +380,10 @@ const PersonalArea = () => {
 
                                 {contentTabs()}
 
-                                <div id="customization" className="col s12">
+                                <div style={animationTabs} id="notification" className="col s12">
+                                    <Notification adminMessage={adminMessage}/>
+                                </div>
+                                <div style={animationTabs} id="customization" className="col s12">
                                     <Customization changeName={changeName}/>
                                 </div>
                             </div>
