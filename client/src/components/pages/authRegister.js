@@ -53,9 +53,6 @@ const AuthRegister = () => {
 			const log = await request('/api/auth/login', 'POST', {...form})
 			auth.login(log.token, log.userId, log.isTeacher, log.isAdmin)
 			history.push('/personalArea#customization')
-			// setTimeout(() => {
-			// 	history.push('/login')
-			// }, 2000)
 		} catch (e) {
 		}
 	}

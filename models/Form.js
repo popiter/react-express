@@ -11,7 +11,7 @@ const schema = new mongoose.Schema({
 		type: Number,
 		required: true
 	},
-	// фото преподавателя
+	// фото продовца
 	img: {
 		type: String,
 		required: true
@@ -26,7 +26,7 @@ const schema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	//id учителя на которого откликнулись
+	//id пользователя кем была созданана анкета/резюме
 	teacher: {
 		type: mongoose.Types.ObjectId,
 		ref: 'User'

@@ -77,7 +77,7 @@ const NavBar = () => {
         <header>
             <Nav>
                 <div className="nav-wrapper blue darken-1">
-                    <NavLink to='/' className='brand-logo'>Репетиторство</NavLink>
+                    <NavLink to='/' className='brand-logo'>Work Hunter</NavLink>
                     <a data-target="mobile-demo" className="sidenav-trigger">
                         <i className="material-icons cursor-pointer">menu</i>
                     </a>

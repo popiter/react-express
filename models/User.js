@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
 	email: {type: String, required: true, unique: true},
 	// пароль юзера
 	password: {type: String, required: true},
-	// является ли юзер учителем
+	// является ли юзер продавцом
 	isTeacher: {type: Boolean, required: true},
 	// является ли юзер админом
 	isAdmin: {type: Boolean, default: false}

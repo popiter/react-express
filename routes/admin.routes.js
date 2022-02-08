@@ -11,10 +11,10 @@ router.post(
     auth,
     async (req, res) => {
         try {
-            const {idForm, idUser, adminMessage, dateSentByAdmin} = req.body
+            const {idForm, idUser, adminMessage} = req.body
 
             const message = new AdminMessage({
-                idForm, idUser, adminMessage, dateSentByAdmin
+                idForm, idUser, adminMessage
             })
             await message.save()
             res.status(201).json({message: 'Сообщение успешно отправлено'})

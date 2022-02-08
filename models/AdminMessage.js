@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
 	// дата отправки сообщение админом
 	dateSentByAdmin: {
 		type: Date,
-		default: ''
+		default: Date.now
 	},
 })
 
