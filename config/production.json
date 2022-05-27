@@ -1,0 +1,7 @@
+{
+  "port": 80,
+  "mongoUri": "mongodb+srv://Dmitriy:PxQjMiMrbYNYXAiS@cluster0.mwqdz.mongodb.net/app?retryWrites=true&w=majority",
+  "mongoPassword": "unvmkH4J9XIHruIQ",
+  "jwtSecret": "DbvAzWe68JW1KENe",
+  "2": "PxQjMiMrbYNYXAiS"
+}
