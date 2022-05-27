@@ -400,17 +400,3 @@ const PersonalArea = () => {
 ;
 
 export default PersonalArea;
-
-res = [{id: 1, product_id: [1, 2]}]
-
-for (let i = 0; i < res.product_id; i++) {
-    res.product_id[i]
-}
-
-orders = [{id: 1, items: 1}, {id: 1, items: 2}, {id: 2, items: 1}]
-
-if (orders[1].id == res[i].id) {
-    {id: 1, items: [1, 2]}
-} else {
-    {id: 1, items: [1]}
-}

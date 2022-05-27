@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, Redirect} from 'react-router-dom'
 import {
 	AuthLogin,
 	CreateApplication,
@@ -21,7 +21,7 @@ const Routes = (isAuthenticated, isTeacher, isAdmin) => {
 						<CreateApplication/>
 					</Route>
 					<Route path="/" exact>
-						<Home/>
+						<Redirect to={'/questionnaires'}/>
 					</Route>
 					<Route path="/questionnaires" exact>
 						<Questionnaires/>
@@ -42,7 +42,7 @@ const Routes = (isAuthenticated, isTeacher, isAdmin) => {
 			return (
 				<Switch>
 					<Route path="/" exact>
-						<Home/>
+						<Redirect to={'/questionnaires'}/>
 					</Route>
 					<Route path="/questionnaires" exact>
 						<Questionnaires/>
@@ -63,7 +63,7 @@ const Routes = (isAuthenticated, isTeacher, isAdmin) => {
 			return (
 				<Switch>
 					<Route path="/" exact>
-						<Home/>
+						<Redirect to={'/questionnaires'}/>
 					</Route>
 					<Route path="/questionnaires" exact>
 						<Questionnaires/>
@@ -83,7 +83,7 @@ const Routes = (isAuthenticated, isTeacher, isAdmin) => {
 	return (
 		<Switch>
 			<Route path="/" exact>
-				<Home/>
+				<Redirect to={'/questionnaires'}/>
 			</Route>
 			<Route path="/questionnaires" exact>
 				<Questionnaires/>

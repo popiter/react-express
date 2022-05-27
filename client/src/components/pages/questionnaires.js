@@ -26,18 +26,25 @@ const Questionnaires = () => {
     const getFormsSearch = async (e, searchForms) => {
         e.preventDefault()
         if (!searchForms) {
-            return
-        }
-        try {
-            const forms = await request(`/api/form/searchForms?search=${searchForms}`, 'GET')
-            setForm(forms)
-            setSearch('')
-            if (!forms.length) {
-                message('Ни одной анкеты не найдено')
+            try {
+                const data = await request('/api/form', 'GET', null, {})
+                setForm(data)
+            } catch (e) {
+                message('Что-то пошло не так')
             }
-        } catch (e) {
-            message('Что-то пошло не так')
+        } else {
+            try {
+                const forms = await request(`/api/form/searchForms?search=${searchForms}`, 'GET')
+                setForm(forms)
+                setSearch('')
+                if (!forms.length) {
+                    message('Ни одной анкеты не найдено')
+                }
+            } catch (e) {
+                message('Что-то пошло не так')
+            }
         }
+
     }
 
     const changeInputSearch = (e) => {

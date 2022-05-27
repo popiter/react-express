@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const Form = require('../models/Form')
+const Feedback = require('../models/Feedback')
 const auth = require('../middleware/auth.middleware')
 const router = Router()
 
@@ -89,6 +90,7 @@ router.post(
 	async (req, res) => {
 		try {
 			await Form.deleteOne({_id: req.body.id})
+			await Feedback.deleteMany({form: req.body.id})
 			res.json({message: 'Анкета успешно удалена'})
 		} catch (e) {
 			res.status(500).json({message: 'Что-то пошло не так'})

@@ -11,13 +11,11 @@ const QuestionnairesDetails = ({forms}) => {
      */
     const normalizePrice = (price) => {
         return new Intl.NumberFormat('ru-RU', {
-            currency: 'rub',
-            style: 'currency'
+            currency: 'rub', style: 'currency'
         }).format(price)
     }
 
-    return (
-        <>
+    return (<>
             {!forms.length ? <h5 className='center'>Ничего не найдено</h5> : null}
             <div className="row" style={{paddingTop: '10px'}}>
                 {forms.map((form) => {
@@ -25,9 +23,9 @@ const QuestionnairesDetails = ({forms}) => {
                         <div className="col s12 m6 l5 xl4" key={form._id}>
                             <div className="card hoverable">
                                 <div className="card-content">
-								<span className="card-title h6">
-									{form.teacher.FULL_NAME}
-								</span>
+								    <span className="card-title h6">
+									    {form.teacher.FULL_NAME}
+								    </span>
                                     <p>{form.subjects}</p>
                                     <p className=''>{normalizePrice(form.price)}</p>
                                 </div>
@@ -40,8 +38,7 @@ const QuestionnairesDetails = ({forms}) => {
                     )
                 })}
             </div>
-        </>
-    );
+        </>);
 };
 
 export default QuestionnairesDetails;

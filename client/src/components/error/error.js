@@ -5,7 +5,7 @@ const Error =() => {
 	return (
 		<div className='container'>
 			<h1>Произошла какая-то ошибка</h1>
-			<NavLink to='/'>Вернуться на главную страницу</NavLink>
+			<NavLink to='/questionnaires'>Вернуться на главную страницу</NavLink>
 		</div>
 	)
 }
